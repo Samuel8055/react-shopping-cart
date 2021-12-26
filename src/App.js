@@ -1,7 +1,13 @@
 const App = () => {
   return (
-    <div>
-      <h1>React Shopping Cart</h1>
+    <div className="grid-container">
+      <header>
+        <a href="/">React Shopping Cart</a>
+      </header>
+
+      <main>Product List</main>
+
+      <footer>All rights reserved.</footer>
     </div>
   );
 };

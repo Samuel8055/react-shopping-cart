@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cart from "./components/Cart";
 import Filter from "./components/Filter";
 import Products from "./components/Products";
 import data from "./data.json";
@@ -7,6 +8,7 @@ const App = () => {
   const [products, setProducts] = useState(data.products);
   const [size, setSize] = useState("");
   const [sort, setSort] = useState("");
+  const [cartItems, setCartItems] = useState([]);
 
   // Filter by size
   const filterProducts = (event) => {
@@ -48,6 +50,34 @@ const App = () => {
     );
   };
 
+  // Add to cart
+  const addToCart = (product) => {
+    const allCartItems = cartItems.slice();
+    let alreadyInCart = false;
+
+    allCartItems.forEach((item) => {
+      if (item._id === product._id) {
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+
+    if (!alreadyInCart) {
+      allCartItems.push({ ...product, count: 1 });
+    }
+
+    setCartItems(allCartItems);
+  };
+
+  // Remove from cart
+  const removeFromCart = (product) => {
+    const allCartItems = cartItems.slice();
+    const filteredCartItems = allCartItems.filter(
+      (item) => item._id !== product._id
+    );
+    setCartItems(filteredCartItems);
+  };
+
   return (
     <div className="grid-container">
       <header>
@@ -64,10 +94,12 @@ const App = () => {
               filterProducts={filterProducts}
               sortProducts={sortProducts}
             />
-            <Products products={products} />
+            <Products products={products} addToCart={addToCart} />
           </div>
 
-          <div className="sidebar">Cart items</div>
+          <div className="sidebar">
+            <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
+          </div>
         </div>
       </main>
 

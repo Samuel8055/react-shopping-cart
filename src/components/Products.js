@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { formatCurrency } from "../utils";
 import Modal from "react-modal";
+import { formatCurrency } from "../utils";
 
 const Products = ({ products, addToCart }) => {
   const [product, setProduct] = useState(null);

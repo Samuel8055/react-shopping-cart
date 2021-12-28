@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Modal from "react-modal";
 import { formatCurrency } from "../utils";
+import { fetchProducts } from "../redux/actions/productActions";
 
 const Products = ({ products, addToCart }) => {
   const [product, setProduct] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   const openModal = (product) => {
     setProduct(product);

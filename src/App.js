@@ -106,7 +106,7 @@ const App = () => {
               filterProducts={filterProducts}
               sortProducts={sortProducts}
             />
-            <Products products={products} addToCart={addToCart} />
+            <Products addToCart={addToCart} />
           </div>
 
           <div className="sidebar">

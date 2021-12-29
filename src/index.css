@@ -130,6 +130,10 @@ footer {
   background-color: #f0c040;
 }
 
+.no-product-text {
+  text-align: center;
+}
+
 /* Filter */
 .filter {
   display: flex;

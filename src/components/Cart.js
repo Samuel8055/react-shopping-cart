@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency } from "../utils";
+import { removeFromCart } from "../redux/actions/cartActions";
 
-const Cart = ({ cartItems, removeFromCart, createOrder }) => {
+const Cart = () => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [formState, setFormState] = useState({
     email: "",
     name: "",
     address: "",
   });
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
 
   // change handler for checkout form inputs
   const handleInput = (e) => {
@@ -28,7 +32,7 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
       cartItems,
     };
 
-    createOrder(order);
+    alert(`Need to create order for ${order.name}`);
   };
 
   return (
@@ -56,7 +60,7 @@ const Cart = ({ cartItems, removeFromCart, createOrder }) => {
                     {formatCurrency(item.price)} x {item.count}{" "}
                     <button
                       className="button"
-                      onClick={() => removeFromCart(item)}
+                      onClick={() => dispatch(removeFromCart(cartItems, item))}
                     >
                       Remove
                     </button>

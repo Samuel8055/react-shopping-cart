@@ -3,15 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-modal";
 import { formatCurrency } from "../utils";
 import { fetchProducts } from "../redux/actions/productActions";
+import { addToCart } from "../redux/actions/cartActions";
 
-const Products = ({ addToCart }) => {
+const Products = () => {
   const [product, setProduct] = useState(null);
+  const [displayProducts, setDisplayProducts] = useState([]);
   const items = useSelector((state) => state.products.items);
+  const filteredItems = useSelector((state) => state.products.filteredItems);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
+
+  useEffect(() => {
+    setProductsToDisplay();
+  });
 
   const openModal = (product) => {
     setProduct(product);
@@ -19,6 +28,12 @@ const Products = ({ addToCart }) => {
 
   const closeModal = () => {
     setProduct(null);
+  };
+
+  const setProductsToDisplay = () => {
+    filteredItems === null
+      ? setDisplayProducts(items)
+      : setDisplayProducts(filteredItems);
   };
 
   const renderModal = () =>
@@ -50,7 +65,7 @@ const Products = ({ addToCart }) => {
                 <button
                   className="button primary"
                   onClick={() => {
-                    addToCart(product);
+                    dispatch(addToCart(cartItems, product));
                     closeModal();
                   }}
                 >
@@ -65,12 +80,14 @@ const Products = ({ addToCart }) => {
 
   return (
     <div>
-      {items && items.length == 0 ? (
-        <div>Loading...</div>
+      {displayProducts && displayProducts.length == 0 ? (
+        <div className="no-product-text">
+          No product available with the selected size!
+        </div>
       ) : (
         <ul className="products">
-          {items &&
-            items.map((item) => (
+          {displayProducts &&
+            displayProducts.map((item) => (
               <li key={item._id}>
                 <div className="product">
                   <a href={`#${item._id}`} onClick={() => openModal(item)}>
@@ -82,7 +99,7 @@ const Products = ({ addToCart }) => {
                     <div>{formatCurrency(item.price)}</div>
                     <button
                       className="button primary"
-                      onClick={() => addToCart(item)}
+                      onClick={() => dispatch(addToCart(cartItems, item))}
                     >
                       Add To Cart
                     </button>
